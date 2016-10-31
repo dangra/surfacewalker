@@ -10,6 +10,7 @@ SPIDER_MIDDLEWARES = {
 }
 DOWNLOADER_MIDDLEWARES = {
     'frontera.contrib.scrapy.middlewares.schedulers.SchedulerDownloaderMiddleware': 1000,
+    'scrapy_crawlera.CrawleraMiddleware': 610,
 }
 SCHEDULER = 'frontera.contrib.scrapy.schedulers.frontier.FronteraScheduler'
 FRONTERA_SETTINGS = 'surfacewalker.frontera.settings'

@@ -17,6 +17,7 @@ class Breadth(scrapy.Spider):
             yield scrapy.Request(url)
 
     def parse(self, response):
+        yield {'url': response.url}
         depth = response.meta.get('depth', 0)
         if depth > 3:
             return
@@ -25,5 +26,4 @@ class Breadth(scrapy.Spider):
             if idx > 10:
                 return
             url = response.urljoin(href.extract())
-            yield {'url': url}
             yield scrapy.Request(url)
