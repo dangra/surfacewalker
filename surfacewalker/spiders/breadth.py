@@ -1,10 +1,29 @@
+import csv
 import scrapy
+from cStringIO import StringIO
 
 
 class Breadth(scrapy.Spider):
     name = 'breadth'
-    #start_urls = ('file://top500-seed.txt',)
+
+    def start_requests(self):
+        yield scrapy.Request('https://moz.com/top500/domains/csv',
+                             callback=self.parse_top500)
+
+    def parse_top500(self, response):
+        reader = csv.reader(StringIO(response.body))
+        for row in reader:
+            url = 'http://' + row[1].strip('"')
+            yield scrapy.Request(url)
 
     def parse(self, response):
-        for href in response.css('a ::attr(href)').extract():
-            yield scrapy.Request(response.urljoin(href))
+        depth = response.meta.get('depth', 0)
+        if depth > 3:
+            return
+
+        for idx, href in enumerate(response.css('a ::attr(href)')):
+            if idx > 10:
+                return
+            url = response.urljoin(href.extract())
+            yield {'url': url}
+            yield scrapy.Request(url)
