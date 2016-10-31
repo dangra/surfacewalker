@@ -1,0 +1,3 @@
+Scrapy
+frontera
+hubstorage-frontera
